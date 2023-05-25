@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from process_excel import process_excel
+from process_excel import process_excel, get_available_columns
 
 class my_window(object):
     def __init__(self):
@@ -10,9 +10,11 @@ class my_window(object):
         # Обозначение всех кнопок на интерфейсе
         self.layout = [[sg.FileBrowse(button_text=self.NAME_OPEN, k=self.EVENT_OPEN, enable_events=True,
                                  file_types=(("EXCEL Files", "*.xlsx"),))],
-                  [sg.Text('', size=(16, 1)), sg.Text(k='selected')],
+                  [sg.Text('Файл:', size=(16, 1)), sg.Text(k='selected')],
+                  [sg.Text('Доступные столбцы:', size=(16, 1)), sg.Text(k='available_columns')],
+                  [sg.Text('Столбцы, которые нужно сохранить:'), sg.InputText(key=self.EVENT_COLUMNS, do_not_clear=False)],
+                  [sg.Text('Столбцы, которые нужно свести в массив в случае похожих строк:'), sg.InputText(key='columns_merged_to_list', do_not_clear=False)],
                   [sg.Button(self.EVENT_EXECUTE)],
-                  [sg.Text('Введите имена столбцов через запятую:'), sg.InputText(key=self.EVENT_COLUMNS, do_not_clear=False)],
                   [sg.Text('', size=(16, 1)), sg.Text(k='out')],
                   ]
 
@@ -30,6 +32,8 @@ class my_window(object):
             # Выбор пути
             if event == self.EVENT_OPEN:
                 window['selected'].update(values[self.EVENT_OPEN])
+                window['available_columns'].update(get_available_columns(values[self.EVENT_OPEN]))
+
 
             # Выполнение
             if event == self.EVENT_EXECUTE:
@@ -37,10 +41,7 @@ class my_window(object):
                     window['out'].update("Не успешно")
                     continue
 
-                try:
-                    process_excel(values[self.EVENT_OPEN], values[self.EVENT_COLUMNS])
-                except:
-                    continue
+                process_excel(values[self.EVENT_OPEN], values[self.EVENT_COLUMNS], values['columns_merged_to_list'])
 
                 window['out'].update("Успешно")
 
