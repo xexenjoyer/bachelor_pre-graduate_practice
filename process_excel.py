@@ -74,7 +74,6 @@ def process_excel(file_path, selected_columns, merged_columns,restrictions):
         json.dump(json_objects, file,ensure_ascii=False)
 
         df = pd.read_json(r'output.json', encoding='cp1251')
-        df.to_csv(r'C:\Users\KolFi\Desktop\bachelor_pre-graduate_practice-master\rdy_2_read1.txt', index=False)
 
         # открыть папку с json'чиком
         webbrowser.open('file:///C:/Users/KolFi/Desktop/bachelor_pre-graduate_practice-master/output')
