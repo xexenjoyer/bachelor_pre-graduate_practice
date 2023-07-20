@@ -10,7 +10,6 @@ def get_available_columns(file_path):
 def process_excel(file_path, selected_columns, merged_columns,restrictions):
     # Чтение данных из Excel-файла
     df = pd.read_excel(file_path)
-    print(df)
 
     # Запрос у пользователя выбранных столбцов
     selected_columns = selected_columns.split(',')
@@ -35,16 +34,11 @@ def process_excel(file_path, selected_columns, merged_columns,restrictions):
     not_merged_columns = list(set(selected_columns) - set(merged_columns))
 
     # Фильтрация данных по выбранным столбцам
-    print(list(df))
     df = df[selected_columns]
-    print(df)
-
-
 
     # Фильтрация данных по содержанию строк
     if len(restrictions[0][0])!=0:
         for i in range(len(restrictions)):
-            print(restrictions[i][1])
             col = restrictions[i][0]
             df[col] = df[col].astype(str)
             df = df[df[col] == restrictions[i][1]]
